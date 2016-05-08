@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GraphicsItemResizer *resizer = new GraphicsItemResizer(item);
     resizer->setBrush(QColor(64, 64, 64));
     resizer->setMinSize(QSizeF(30, 30));
-    resizer->setTargetRect(QRectF(item->pos(), item->boundingRect().size()));
+    resizer->setTargetSize(item->boundingRect().size());
     QObject::connect(resizer, &GraphicsItemResizer::targetRectChanged, [item](const QRectF &rect)
     {
         QPointF pos = item->pos();

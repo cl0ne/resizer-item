@@ -139,7 +139,7 @@ void GraphicsItemResizer::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e
     }
     QPointF mousePos = event->pos();
     QPointF offset = mousePos - event->lastPos();
-    QRectF targetRect = resizer()->targetRect();
+    QRectF targetRect(QPointF(), resizer()->targetSize());
     QSizeF minSize = resizer()->minSize();
     QRectF bounds = boundingRect();
     HandlerStrategy::PointPosition p = HandlerStrategy::PointPosition(mousePos, bounds);

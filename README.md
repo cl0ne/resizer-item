@@ -8,11 +8,14 @@ smaller than specified).
 
 ### How to use it
 Copy `resizer` dir to your project. Include file `resizer/graphicsitemresizer.h`.
-Create instance of `GraphicsItemResizer` class, set target rectangle value to your
-initial rectangle bounds (position will be ignored) and minimum size if needed.
+Create instance of `GraphicsItemResizer` class, set initial target area size
+and minimum size if needed.
+
+Use `setTargetSize` slot to notify resizer item about target area size changes.
 
 To handle size and position changes subscribe to `GraphicsItemResizer::targetRectChanged`
-signal.
+signal. Position of received rectangle contains target area's left top corner offset
+and size is equal to new size.
 
 You can change pen and brush for resizer handles using `setPen` and `setBrush`
 methods.

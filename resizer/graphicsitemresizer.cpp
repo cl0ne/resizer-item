@@ -10,6 +10,7 @@ static QMarginsF handleBounds = QMarginsF(handleSize.width(), handleSize.height(
 
 GraphicsItemResizer::GraphicsItemResizer(QGraphicsItem *parent)
     : QGraphicsItem(parent)
+    , mTargetSize(0, 0)
     , mMinSize(0, 0)
 {
     static QRectF handleRect(QPointF(), handleSize);
@@ -64,13 +65,13 @@ void GraphicsItemResizer::setBrush(const QBrush &brush)
     }
 }
 
-void GraphicsItemResizer::setTargetRect(const QRectF &rect)
+void GraphicsItemResizer::setTargetSize(const QSizeF &size)
 {
-    if (rect == mTargetRect)
+    if (size == targetSize())
     {
         return;
     }
-    updateDimensions(rect);
+    updateDimensions(size);
 }
 
 void GraphicsItemResizer::setMinSize(const QSizeF &minSize)
@@ -89,21 +90,20 @@ void GraphicsItemResizer::updateHandleItemPositions()
 
 void GraphicsItemResizer::updateTargetRect(const QRectF &rect)
 {
-    if (rect == mTargetRect)
+    if (rect.size() == targetSize())
     {
         return;
     }
-    updateDimensions(rect);
+    updateDimensions(rect.size());
     emit targetRectChanged(rect);
 }
 
 
-void GraphicsItemResizer::updateDimensions(QRectF rect)
+void GraphicsItemResizer::updateDimensions(QSizeF newSize)
 {
     prepareGeometryChange();
-    rect.moveTo(0, 0);
-    mTargetRect = rect;
-    rect += handleBounds;
+    mTargetSize = newSize;
+    QRectF rect = QRectF(QPointF(), newSize) + handleBounds;
     setPos(rect.topLeft());
     mBounds = QRectF(QPointF(), rect.size());
     updateHandleItemPositions();

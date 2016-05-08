@@ -23,8 +23,9 @@ public:
     void setMinSize(const QSizeF &minSize);
 
     inline QSizeF targetSize() const;
-    inline QRectF targetRect() const;
-    void setTargetRect(const QRectF &rect);
+
+public slots:
+    void setTargetSize(const QSizeF &size);
 
 signals:
     void targetRectChanged(const QRectF &rect);
@@ -38,15 +39,15 @@ private:
     class HandleItem;
 
     void updateHandleItemPositions();
-    void updateDimensions(QRectF rect);
+    void updateDimensions(QSizeF newSize);
     void updateTargetRect(const QRectF &rect);
 
     QList<HandleItem *> mHandleItems;
     QPen mPen;
     QBrush mBrush;
+    QSizeF mTargetSize;
     QSizeF mMinSize;
     QRectF mBounds;
-    QRectF mTargetRect;
 };
 
 QBrush GraphicsItemResizer::brush() const
@@ -66,12 +67,7 @@ QSizeF GraphicsItemResizer::minSize() const
 
 QSizeF GraphicsItemResizer::targetSize() const
 {
-    return mTargetRect.size();
-}
-
-QRectF GraphicsItemResizer::targetRect() const
-{
-    return mTargetRect;
+    return mTargetSize;
 }
 
 #endif // GRAPHICSITEMRESIZER_H
