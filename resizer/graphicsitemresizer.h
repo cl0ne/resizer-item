@@ -6,75 +6,114 @@
 #include <QPen>
 #include <QGraphicsView>
 
-class GraphicsItemResizer : public QObject, public QGraphicsItem
+class GraphicsItemResizer : public QGraphicsObject
 {
     Q_OBJECT
     Q_INTERFACES(QGraphicsItem)
 public:
-    explicit GraphicsItemResizer(QGraphicsItem *parent = nullptr);
+    explicit GraphicsItemResizer(QGraphicsItem *target, QGraphicsItem *parent = nullptr);
     ~GraphicsItemResizer();
 
-    inline QBrush brush() const;
-    void setBrush(const QBrush &brush);
+    inline QBrush handleItemBrush() const;
+    void setHandleItemBrush(const QBrush &brush);
 
-    inline QPen pen() const;
-    void setPen(const QPen &pen);
+    inline QPen handleItemPen() const;
+    void setHandleItemPen(const QPen &pen);
 
-    inline QSizeF minSize() const;
-    void setMinSize(const QSizeF &minSize);
+    inline QBrush boundingRectAreaBrush() const;
+    void setBoundingRectAreaBrush(const QBrush &brush);
 
+    inline QPen boundingRectAreaPen() const;
+    void setBoundingRectAreaPen(const QPen &pen);
+
+    inline bool boundingRectAreaVisible() const;
+    void setBoundingRectAreaVisible(bool visible);
+
+    inline QGraphicsItem* target() const;
+
+    QRectF targetBoundingRect() const;
     inline QSizeF targetSize() const;
+
+    inline QSizeF targetMinSize() const;
+    void setTargetMinSize(const QSizeF &minSize);
 
     bool handlersIgnoreTransformations() const;
     // If true, handler items ignore all transformations e.g. zooming the view etc
     void setHandlersIgnoreTransformations(bool ignore);
-
-public slots:
-    void setTargetSize(const QSizeF &size);
-
-signals:
-    void targetRectChanged(const QRectF &rect);
 
     // QGraphicsItem interface
 public:
     virtual QRectF boundingRect() const override;
     virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+public slots:
+    void updateState();
+
+signals:
+    void targetRectChanged(const QRectF &rect);
+
 private:
     class HandleItem;
 
     void updateHandleItemPositions();
-    void updateDimensions(QSizeF newSize);
+    void updateSize(const QSizeF &size);
+    void updateBoundingRect();
     void updateTargetRect(const QRectF &rect);
 
     QList<HandleItem *> mHandleItems;
-    QPen mPen;
-    QBrush mBrush;
+    QPen mHandleItemPen;
+    QBrush mHandleItemBrush;
+
+    QGraphicsItem* mTarget;
     QSizeF mTargetSize;
-    QSizeF mMinSize;
+    QSizeF mTargetMinSize;
     QRectF mBounds;
 
-    bool mHandlersIgnoreTransformations = false;
+    bool mBoundingRectAreaVisible;
+    QPen mBoundingRectAreaPen;
+    QBrush mBoundingRectAreaBrush;
+
+    bool mHandlersIgnoreTransformations;
 };
 
-QBrush GraphicsItemResizer::brush() const
+QBrush GraphicsItemResizer::handleItemBrush() const
 {
-    return mBrush;
+    return mHandleItemBrush;
 }
 
-QPen GraphicsItemResizer::pen() const
+QPen GraphicsItemResizer::handleItemPen() const
 {
-    return mPen;
+    return mHandleItemPen;
 }
 
-QSizeF GraphicsItemResizer::minSize() const
+QBrush GraphicsItemResizer::boundingRectAreaBrush() const
 {
-    return mMinSize;
+    return mBoundingRectAreaBrush;
+}
+
+QPen GraphicsItemResizer::boundingRectAreaPen() const
+{
+    return mBoundingRectAreaPen;
+}
+
+bool GraphicsItemResizer::boundingRectAreaVisible() const
+{
+    return mBoundingRectAreaVisible;
+}
+
+QGraphicsItem* GraphicsItemResizer::target() const
+{
+    return mTarget;
 }
 
 QSizeF GraphicsItemResizer::targetSize() const
 {
     return mTargetSize;
+}
+
+QSizeF GraphicsItemResizer::targetMinSize() const
+{
+    return mTargetMinSize;
 }
 
 #endif // GRAPHICSITEMRESIZER_H

@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QGraphicsItem>
+#include "resizer/graphicsitemresizer.h"
 
 namespace Ui {
 class MainWindow;
@@ -17,6 +19,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    QGraphicsItem* mTestItem;
+    GraphicsItemResizer* mResizer;
 };
 
 #endif // MAINWINDOW_H
