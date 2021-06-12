@@ -13,20 +13,18 @@ GraphicsItemResizer::GraphicsItemResizer(QGraphicsItem *parent)
     , mTargetSize(0, 0)
     , mMinSize(0, 0)
 {
-    static QRectF handleRect(QPointF(), handleSize);
-
     setFlag(ItemHasNoContents);
 
     // sides
-    mHandleItems.append(new HandleItem(HandleItem::Left, handleRect, this));
-    mHandleItems.append(new HandleItem(HandleItem::Top, handleRect, this));
-    mHandleItems.append(new HandleItem(HandleItem::Right, handleRect, this));
-    mHandleItems.append(new HandleItem(HandleItem::Bottom, handleRect, this));
+    mHandleItems.append(new HandleItem(HandleItem::Left, handleSize, this));
+    mHandleItems.append(new HandleItem(HandleItem::Top, handleSize, this));
+    mHandleItems.append(new HandleItem(HandleItem::Right, handleSize, this));
+    mHandleItems.append(new HandleItem(HandleItem::Bottom, handleSize, this));
     // corners
-    mHandleItems.append(new HandleItem(HandleItem::Top | HandleItem::Left, handleRect, this));
-    mHandleItems.append(new HandleItem(HandleItem::Top | HandleItem::Right, handleRect, this));
-    mHandleItems.append(new HandleItem(HandleItem::Bottom | HandleItem::Right, handleRect, this));
-    mHandleItems.append(new HandleItem(HandleItem::Bottom | HandleItem::Left, handleRect, this));
+    mHandleItems.append(new HandleItem(HandleItem::Top | HandleItem::Left, handleSize, this));
+    mHandleItems.append(new HandleItem(HandleItem::Top | HandleItem::Right, handleSize, this));
+    mHandleItems.append(new HandleItem(HandleItem::Bottom | HandleItem::Right, handleSize, this));
+    mHandleItems.append(new HandleItem(HandleItem::Bottom | HandleItem::Left, handleSize, this));
 }
 
 GraphicsItemResizer::~GraphicsItemResizer()
@@ -77,6 +75,22 @@ void GraphicsItemResizer::setTargetSize(const QSizeF &size)
 void GraphicsItemResizer::setMinSize(const QSizeF &minSize)
 {
     mMinSize = minSize;
+}
+
+bool GraphicsItemResizer::handlersIgnoreTransformations() const
+{
+    return mHandlersIgnoreTransformations;
+}
+
+void GraphicsItemResizer::setHandlersIgnoreTransformations(bool ignore)
+{
+    if (mHandlersIgnoreTransformations != ignore)
+    {
+        mHandlersIgnoreTransformations = ignore;
+
+        for (auto handleItem : mHandleItems)
+            handleItem->setFlag(ItemIgnoresTransformations, ignore);
+    }
 }
 
 void GraphicsItemResizer::updateHandleItemPositions()

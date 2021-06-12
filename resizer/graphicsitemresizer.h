@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QGraphicsItem>
 #include <QPen>
+#include <QGraphicsView>
 
 class GraphicsItemResizer : public QObject, public QGraphicsItem
 {
@@ -23,6 +24,10 @@ public:
     void setMinSize(const QSizeF &minSize);
 
     inline QSizeF targetSize() const;
+
+    bool handlersIgnoreTransformations() const;
+    // If true, handler items ignore all transformations e.g. zooming the view etc
+    void setHandlersIgnoreTransformations(bool ignore);
 
 public slots:
     void setTargetSize(const QSizeF &size);
@@ -48,6 +53,8 @@ private:
     QSizeF mTargetSize;
     QSizeF mMinSize;
     QRectF mBounds;
+
+    bool mHandlersIgnoreTransformations = false;
 };
 
 QBrush GraphicsItemResizer::brush() const

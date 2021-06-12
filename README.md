@@ -20,5 +20,9 @@ and size is equal to new size.
 You can change pen and brush for resizer handles using `setPen` and `setBrush`
 methods.
 
+Use `setHandlersIgnoreTransformations` to force handler items ignore all transformations. 
+For example, it would be useful when attached graphics views can be zoomed or rotated -
+handlers will have the same size and relative position.
+
 ### License
 Resizer item is licensed under the Apache License, Version 2.0. See LICENSE for details.

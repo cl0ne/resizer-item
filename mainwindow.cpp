@@ -4,6 +4,7 @@
 #include "resizer/graphicsitemresizer.h"
 
 #include <QGraphicsRectItem>
+#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -23,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
     resizer->setBrush(QColor(64, 64, 64));
     resizer->setMinSize(QSizeF(30, 30));
     resizer->setTargetSize(item->boundingRect().size());
+    resizer->setHandlersIgnoreTransformations(true);
     QObject::connect(resizer, &GraphicsItemResizer::targetRectChanged, [item](const QRectF &rect)
     {
         QPointF pos = item->pos();
@@ -33,6 +35,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
+
+    ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
+
+    connect(ui->plusButton, &QPushButton::clicked, this, [&]() {
+        ui->graphicsView->scale(1.2, 1.2);
+    });
+    connect(ui->minusButton, &QPushButton::clicked, this, [&]() {
+        ui->graphicsView->scale((1.0 / 1.2), (1.0 / 1.2));
+    });
 }
 
 MainWindow::~MainWindow()

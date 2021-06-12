@@ -4,6 +4,7 @@
 #include <QBrush>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
+#include <QDebug>
 
 QHash<int, QWeakPointer<HandlerStrategy>> GraphicsItemResizer::HandleItem::Strategies;
 
@@ -23,10 +24,16 @@ GraphicsItemResizer::HandleItem::HandleItem(int attachmentFlags, const QRectF &r
     mStrategy = getStrategy(mAttachmentFlags);
 }
 
+GraphicsItemResizer::HandleItem::HandleItem(int attachmentFlags, const QSizeF &size, GraphicsItemResizer *resizer)
+    : HandleItem(attachmentFlags, handlerRect(attachmentFlags, size), resizer)
+
+{
+
+}
+
 void GraphicsItemResizer::HandleItem::targetRectChanged(const QRectF &targetRect)
 {
-    QSizeF halfSize = rect().size() / 2.0f;
-    QPointF newPos = targetRect.center() - QPointF(halfSize.width(), halfSize.height());
+    QPointF newPos = targetRect.center();
     mStrategy->alignPosition(targetRect, newPos);
     setPos(newPos);
 }
@@ -34,6 +41,28 @@ void GraphicsItemResizer::HandleItem::targetRectChanged(const QRectF &targetRect
 GraphicsItemResizer *GraphicsItemResizer::HandleItem::resizer() const
 {
     return mResizer;
+}
+
+QRectF GraphicsItemResizer::HandleItem::handlerRect(int attachment, const QSizeF& size) const
+{
+    double w = size.width();
+    double h = size.height();
+    double x = 0;
+    double y = 0;
+
+    // Handler is on the center of left or right side
+    if ((attachment & HandleItem::VerticalMask) == 0)
+        y = -h/2;
+    // Handler is on the center of bottom or top side
+    if ((attachment & HandleItem::HorizontalMask) == 0)
+        x = -w/2;
+
+    if (attachment & HandleItem::Left)
+        x = -w;
+    if (attachment & HandleItem::Top)
+        y = -h;
+
+    return QRectF(x, y, w, h);
 }
 
 int GraphicsItemResizer::HandleItem::cleanAttachment(int attachment)
@@ -64,9 +93,6 @@ int GraphicsItemResizer::HandleItem::cleanAttachment(int attachment)
 
 Qt::CursorShape GraphicsItemResizer::HandleItem::getCursor(int attachment)
 {
-    static int HorizontalMask = Left | Right;
-    static int VerticalMask = Top | Bottom;
-
     if ((attachment & VerticalMask) == 0)
     {
         return Qt::SizeHorCursor;
@@ -138,7 +164,7 @@ void GraphicsItemResizer::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e
         return;
     }
     QPointF mousePos = event->pos();
-    QPointF offset = mousePos - event->lastPos();
+    QPointF offset = event->scenePos() - event->lastScenePos();
     QRectF targetRect(QPointF(), resizer()->targetSize());
     QSizeF minSize = resizer()->minSize();
     QRectF bounds = boundingRect();
