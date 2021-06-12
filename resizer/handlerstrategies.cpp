@@ -39,7 +39,7 @@ void TopHandlerStrategy::solveConstraints(QPointF offset, QSizeF minSize, QRectF
 
 void TopHandlerStrategy::alignPosition(const QRectF &targetRect, QPointF &position)
 {
-    position.setY(0);
+    position.setY(targetRect.top());
     HandlerStrategy::alignPosition(targetRect, position);
 }
 
@@ -83,7 +83,7 @@ void LeftHandlerStrategy::solveConstraints(QPointF offset, QSizeF minSize, QRect
 
 void LeftHandlerStrategy::alignPosition(const QRectF &targetRect, QPointF &position)
 {
-    position.setX(0);
+    position.setX(targetRect.left());
     HandlerStrategy::alignPosition(targetRect, position);
 }
 

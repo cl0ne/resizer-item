@@ -19,7 +19,11 @@ public:
         Right = 0x8
     };
 
+    constexpr static int HorizontalMask = HandleItem::Left | HandleItem::Right;
+    constexpr static int VerticalMask = HandleItem::Top | HandleItem::Bottom;
+
     explicit HandleItem(int attachmentFlags, const QRectF &rect, GraphicsItemResizer *resizer);
+    explicit HandleItem(int attachmentFlags, const QSizeF &size, GraphicsItemResizer *resizer);
 
     int attachmentFlags() const
     {
@@ -36,6 +40,8 @@ protected:
 
 private:
     GraphicsItemResizer *resizer() const;
+
+    QRectF handlerRect(int attachment, const QSizeF &size) const;
 
     GraphicsItemResizer *mResizer;
     int mAttachmentFlags;
