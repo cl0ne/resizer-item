@@ -4,7 +4,6 @@
 #include <QBrush>
 #include <QCursor>
 #include <QGraphicsSceneMouseEvent>
-#include <QDebug>
 
 QHash<int, QWeakPointer<HandlerStrategy>> GraphicsItemResizer::HandleItem::Strategies;
 
@@ -25,7 +24,7 @@ GraphicsItemResizer::HandleItem::HandleItem(int attachmentFlags, const QRectF &r
 }
 
 GraphicsItemResizer::HandleItem::HandleItem(int attachmentFlags, const QSizeF &size, GraphicsItemResizer *resizer)
-    : HandleItem(attachmentFlags, handlerRect(attachmentFlags, size), resizer)
+    : HandleItem(attachmentFlags, handleRect(attachmentFlags, size), resizer)
 
 {
 
@@ -43,7 +42,7 @@ GraphicsItemResizer *GraphicsItemResizer::HandleItem::resizer() const
     return mResizer;
 }
 
-QRectF GraphicsItemResizer::HandleItem::handlerRect(int attachment, const QSizeF& size) const
+QRectF GraphicsItemResizer::HandleItem::handleRect(int attachment, const QSizeF& size) const
 {
     double w = size.width();
     double h = size.height();
@@ -163,7 +162,6 @@ void GraphicsItemResizer::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e
         event->ignore();
         return;
     }
-    QPointF mousePos = event->pos();
     QPointF offset = event->scenePos() - event->lastScenePos();
     QRectF targetRect(QPointF(), resizer()->targetSize());
     QSizeF minSize = resizer()->minSize();

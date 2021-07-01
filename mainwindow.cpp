@@ -4,7 +4,6 @@
 #include "resizer/graphicsitemresizer.h"
 
 #include <QGraphicsRectItem>
-#include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

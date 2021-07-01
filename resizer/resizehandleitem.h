@@ -41,7 +41,7 @@ protected:
 private:
     GraphicsItemResizer *resizer() const;
 
-    QRectF handlerRect(int attachment, const QSizeF &size) const;
+    QRectF handleRect(int attachment, const QSizeF &size) const;
 
     GraphicsItemResizer *mResizer;
     int mAttachmentFlags;
