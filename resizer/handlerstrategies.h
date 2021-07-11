@@ -16,12 +16,14 @@ public:
             OutsideBefore,
             OutsideAfter
         };
+
     public:
         PointPosition(const QPointF &p, const QRectF &bounds);
         bool xToTheLeft() const;
         bool xToTheRight() const;
         bool yAbove() const;
         bool yBelow() const;
+
     private:
         static Relation getRelation(qreal x, qreal left, qreal right);
         Relation mX;

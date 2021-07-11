@@ -25,7 +25,6 @@ GraphicsItemResizer::HandleItem::HandleItem(int attachmentFlags, const QRectF &r
 
 GraphicsItemResizer::HandleItem::HandleItem(int attachmentFlags, const QSizeF &size, GraphicsItemResizer *resizer)
     : HandleItem(attachmentFlags, handleRect(attachmentFlags, size), resizer)
-
 {
 
 }
@@ -42,7 +41,7 @@ GraphicsItemResizer *GraphicsItemResizer::HandleItem::resizer() const
     return mResizer;
 }
 
-QRectF GraphicsItemResizer::HandleItem::handleRect(int attachment, const QSizeF& size) const
+QRectF GraphicsItemResizer::HandleItem::handleRect(int attachment, const QSizeF &size) const
 {
     double w = size.width();
     double h = size.height();
@@ -51,15 +50,25 @@ QRectF GraphicsItemResizer::HandleItem::handleRect(int attachment, const QSizeF&
 
     // Handler is on the center of left or right side
     if ((attachment & HandleItem::VerticalMask) == 0)
-        y = -h/2;
+    {
+        y = -h / 2;
+    }
+
     // Handler is on the center of bottom or top side
     if ((attachment & HandleItem::HorizontalMask) == 0)
-        x = -w/2;
+    {
+        x = -w / 2;
+    }
 
     if (attachment & HandleItem::Left)
+    {
         x = -w;
+    }
+
     if (attachment & HandleItem::Top)
+    {
         y = -h;
+    }
 
     return QRectF(x, y, w, h);
 }
@@ -86,6 +95,7 @@ int GraphicsItemResizer::HandleItem::cleanAttachment(int attachment)
     {
         valid |= Bottom;
     }
+
     Q_ASSERT(valid != 0);
     return valid;
 }
@@ -96,6 +106,7 @@ Qt::CursorShape GraphicsItemResizer::HandleItem::getCursor(int attachment)
     {
         return Qt::SizeHorCursor;
     }
+
     if ((attachment & HorizontalMask) == 0)
     {
         return Qt::SizeVerCursor;
@@ -140,6 +151,7 @@ QSharedPointer<HandlerStrategy> GraphicsItemResizer::HandleItem::getStrategy(int
         {
             s = new BottomHandlerStrategy(s);
         }
+
         Q_ASSERT(s != nullptr);
         strategy.reset(s);
         weak = strategy;
@@ -162,9 +174,10 @@ void GraphicsItemResizer::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e
         event->ignore();
         return;
     }
+
     QPointF offset = event->scenePos() - event->lastScenePos();
-    QRectF targetRect(QPointF(), resizer()->targetSize());
     QSizeF minSize = resizer()->minSize();
+    QRectF targetRect(QPointF(), resizer()->targetSize());
     QRectF bounds = boundingRect();
     HandlerStrategy::PointPosition p = HandlerStrategy::PointPosition(event->pos(), bounds);
 

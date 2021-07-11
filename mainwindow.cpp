@@ -24,25 +24,34 @@ MainWindow::MainWindow(QWidget *parent) :
     resizer->setMinSize(QSizeF(30, 30));
     resizer->setTargetSize(item->boundingRect().size());
     resizer->setHandlersIgnoreTransformations(true);
-    QObject::connect(resizer, &GraphicsItemResizer::targetRectChanged, [item](const QRectF &rect)
-    {
-        QPointF pos = item->pos();
-        item->setPos(pos + rect.topLeft());
-        QRectF old = item->rect();
-        item->setRect(QRectF(old.topLeft(), rect.size()));
-    });
+    QObject::connect(
+        resizer,
+        &GraphicsItemResizer::targetRectChanged,
+        [item](const QRectF & rect)
+        {
+            QPointF pos = item->pos();
+            item->setPos(pos + rect.topLeft());
+            QRectF old = item->rect();
+            item->setRect(QRectF(old.topLeft(), rect.size()));
+        }
+    );
 
     ui->graphicsView->setScene(scene);
     ui->graphicsView->setAlignment(Qt::AlignTop | Qt::AlignLeft);
 
     ui->graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
-    connect(ui->plusButton, &QPushButton::clicked, this, [&]() {
-        ui->graphicsView->scale(1.2, 1.2);
-    });
-    connect(ui->minusButton, &QPushButton::clicked, this, [&]() {
-        ui->graphicsView->scale((1.0 / 1.2), (1.0 / 1.2));
-    });
+    connect(
+        ui->plusButton,
+        &QPushButton::clicked, this,
+        [&](){ ui->graphicsView->scale(1.2, 1.2); }
+    );
+    connect(
+        ui->minusButton,
+        &QPushButton::clicked,
+        this,
+        [&]() { ui->graphicsView->scale((1.0 / 1.2), (1.0 / 1.2)); }
+    );
 }
 
 MainWindow::~MainWindow()
