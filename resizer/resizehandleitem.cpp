@@ -166,7 +166,7 @@ void GraphicsItemResizer::HandleItem::mouseMoveEvent(QGraphicsSceneMouseEvent *e
     QRectF targetRect(QPointF(), resizer()->targetSize());
     QSizeF minSize = resizer()->minSize();
     QRectF bounds = boundingRect();
-    HandlerStrategy::PointPosition p = HandlerStrategy::PointPosition(mousePos, bounds);
+    HandlerStrategy::PointPosition p = HandlerStrategy::PointPosition(event->pos(), bounds);
 
     mStrategy->solveConstraints(offset, minSize, targetRect, p);
 
