@@ -1,0 +1,12 @@
+--indent-switches
+--indent-preprocessor
+--indent-col1-comments
+--pad-oper
+--pad-header
+--unpad-paren
+--add-braces
+--keep-one-line-statements
+-A1
+--align-pointer=name
+--align-reference=name
+--lineend=linux
